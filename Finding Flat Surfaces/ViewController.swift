@@ -30,12 +30,25 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         sceneView.session.pause()
     }
+    
+    func createFloor() -> SCNNode{
+        let planeGeometry = SCNPlane(width: 1.0, height: 1.0)
+        planeGeometry.firstMaterial?.diffuse.contents = UIColor.green
+        
+        let planeNode = SCNNode(geometry: planeGeometry)
+        planeNode.eulerAngles.x = -Float.pi/2
+        planeNode.opacity = 0.25
+        
+        return planeNode
+    }
 
     // MARK: - ARSCNViewDelegate
     
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
         guard let planeAnchor = anchor as? ARPlaneAnchor else { return  }
-        print("A new plane has been discoverd.")
+
+        let floor = createFloor()
+        node.addChildNode(floor)
     }
     
 /*
