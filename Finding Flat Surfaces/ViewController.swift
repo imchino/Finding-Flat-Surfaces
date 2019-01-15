@@ -31,8 +31,11 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         sceneView.session.pause()
     }
     
-    func createFloor() -> SCNNode{
-        let planeGeometry = SCNPlane(width: 1.0, height: 1.0)
+    func createFloor(from anchor: ARPlaneAnchor) -> SCNNode{
+        let anchorWidth  = CGFloat(anchor.extent.x)
+        let anchorHeight = CGFloat(anchor.extent.z)
+        
+        let planeGeometry = SCNPlane(width: anchorWidth, height: anchorHeight)
         planeGeometry.firstMaterial?.diffuse.contents = UIColor.green
         
         let planeNode = SCNNode(geometry: planeGeometry)
@@ -47,7 +50,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
         guard let planeAnchor = anchor as? ARPlaneAnchor else { return  }
 
-        let floor = createFloor()
+        let floor = createFloor(from: planeAnchor)
         node.addChildNode(floor)
     }
     
