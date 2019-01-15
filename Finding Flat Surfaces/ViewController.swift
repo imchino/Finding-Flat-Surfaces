@@ -54,6 +54,19 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         node.addChildNode(floor)
     }
     
+    func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
+        guard let planeAnchor = anchor as? ARPlaneAnchor,
+                   let planeNode = node.childNodes.first,
+                   let planeNodeGeometry = planeNode.geometry as? SCNPlane
+            else { return }
+
+        let updatedPosition = SCNVector3(planeAnchor.center.x, 0, planeAnchor.center.z)
+        planeNode.position = updatedPosition
+
+        planeNodeGeometry.width  = CGFloat(planeAnchor.extent.x)
+        planeNodeGeometry.height = CGFloat(planeAnchor.extent.z)
+    }
+    
 /*
     // Override to create and configure nodes for anchors added to the view's session.
     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
